@@ -52,6 +52,12 @@ p5.Renderer2D.prototype.background = function(...args) {
     const curFill = this._getFill();
     // create background rect
     const color = this._pInst.color(...args);
+
+    //accessible Outputs
+    if (this._pInst._addAccsOutput()) {
+      this._pInst._accsBackground(color.levels);
+    }
+
     const newFill = color.toString();
     this._setFill(newFill);
 
@@ -80,11 +86,21 @@ p5.Renderer2D.prototype.clear = function() {
 p5.Renderer2D.prototype.fill = function(...args) {
   const color = this._pInst.color(...args);
   this._setFill(color.toString());
+
+  //accessible Outputs
+  if (this._pInst._addAccsOutput()) {
+    this._pInst._accsCanvasColors('fill', color.levels);
+  }
 };
 
 p5.Renderer2D.prototype.stroke = function(...args) {
   const color = this._pInst.color(...args);
   this._setStroke(color.toString());
+
+  //accessible Outputs
+  if (this._pInst._addAccsOutput()) {
+    this._pInst._accsCanvasColors('stroke', color.levels);
+  }
 };
 
 p5.Renderer2D.prototype.erase = function(opacityFill, opacityStroke) {
@@ -288,6 +304,7 @@ p5.Renderer2D.prototype.set = function(x, y, imgOrCol) {
       pixelsState._pixelDensity,
       pixelsState._pixelDensity
     );
+    this.drawingContext.clearRect(x, y, imgOrCol.width, imgOrCol.height);
     this.drawingContext.drawImage(imgOrCol.canvas, x, y);
     this.drawingContext.restore();
   } else {
@@ -520,7 +537,6 @@ p5.Renderer2D.prototype.ellipse = function(args) {
   ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
   ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
   ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
-  ctx.closePath();
   if (doFill) {
     ctx.fill();
   }

@@ -13,7 +13,7 @@ You must specify one of these for the element to appear in the docs, with the na
 * You can use markdown syntax to format the description text. 
 * Any function, variable, or constant name should be `monospaced` by using single quotes on either side.
 * Double line breaks are recognized as new paragraphs. You do not need to insert `<br><br>` tags.
-* When possible, link to other files when mentioning other function or variable names. For example, you can see the preload method linked in the description for [loadImage](https://github.com/processing/p5.js/blob/master/src/image/loading_displaying.js#L21).
+* When possible, link to other files when mentioning other function or variable names. For example, you can see the preload method linked in the description for [loadImage](https://github.com/processing/p5.js/blob/main/src/image/loading_displaying.js#L21).
 * Here is [yuidoc's reference](http://yui.github.io/yuidoc/syntax/index.html#basic-requirements) for more syntax information.
 
 ```
@@ -73,7 +73,7 @@ If the parameter is optional, add square brackets around the name:
 @param {type} [name] Description here.
 ```
 
-If the parameter takes one or more values defined in `constants.js`,
+If the parameter takes one or more values defined in [`constants.js`](https://github.com/processing/p5.js/blob/main/src/core/constants.js) ,
 then the type should be specified as `{Constant}` and the valid values should be enumerated in the comment following the `either` keyword, eg:
 
 ```
@@ -88,7 +88,7 @@ The `@return` is identical to `@params`, but without the name. It should be the 
 @return {type} Description of the data returned.
 ```
 
-If the method returns the parent object, you can skip the @return and add this line instead:
+If the method returns the parent object, you can skip the `@return` and add this line instead:
 
 ```
 @chainable
@@ -96,7 +96,7 @@ If the method returns the parent object, you can skip the @return and add this l
 
 ## Additional signatures
 
-If a method has multiple possible parameter options, you can specify each individually. For example, see the examples for [background](http://p5js.org/reference/#p5/background) under "syntax". To do this, choose one version to list as the first signature using the guidelines above. At the end of the documentation block, you can add additional signatures, each in it's own block, following the example below.
+If a method has multiple possible parameter options, you can specify each individually. For example, see the examples for [background](http://p5js.org/reference/#p5/background) under "syntax". To do this, choose one version to list as the first signature using the guidelines above. At the end of the documentation block, you can add additional signatures, each in its own block, following the example below.
 
 ```
 /**
@@ -116,7 +116,7 @@ If a method has multiple possible parameter options, you can specify each indivi
 
 Notes:
 * If a parameter has been defined previously, like `a` in this case, you do not need to fill in the definition again. 
-* It is not necessary to create a separate signature if the only difference between two signatures is the additional of an optional parameter.
+* It is not necessary to create a separate signature if the only difference between two signatures is the addition of an optional parameter.
 * You can see two examples of this inline in the source code for [background](https://github.com/processing/p5.js/blob/f38f91308fdacc2f1982e0430b620778fff30a5a/src/color/setting.js#L106) and [color](https://github.com/processing/p5.js/blob/f38f91308fdacc2f1982e0430b620778fff30a5a/src/color/creating_reading.js#L241).
 
 ## Specify other tags
@@ -147,7 +147,7 @@ Use `@private` if a property or variable is a private variable (default is `@pub
 
 ## Specify module for files
 
-The top of each *file* should contain a `@module` tag at the top of the file. Modules should correspond to JavaScript files (or require.js modules). They can work as groups in the lists of items. see here: http://p5js.org/api/#methods (the modules are COLOR, IMAGE, PVECTOR, etc.). 
+The top of each *file* should contain a `@module` tag. Modules should correspond to JavaScript files (or require.js modules). They can work as groups in the lists of items. See http://p5js.org/api/#methods (the modules are COLOR, IMAGE, PVECTOR, etc.). 
 
 ```
 /**
@@ -178,7 +178,7 @@ Constructors are defined with `@class`. Each constructor should have the tag `@c
 
 ## Adding example code
 
-Optionally, you can add examples with `@example`. Example code can be placed between `<code></code>` tags with comments included. Unless otherwise specified with a `setup()` function, each `<code>` block is automatically run on a canvas of 100x100 pixels with a gray background.  Define all variables with `let` in examples, as the lowest barrier for beginners learning JS. Please see examples in other src files to make sure it is formatted correctly.
+Optionally, you can add examples with `@example`. Example code should be placed between `<code></code>` tags with comments included. Unless otherwise specified with a `setup()` function, each `<code>` block is automatically run on a canvas of 100x100 pixels with a gray background. Define all variables with `let` in examples, as the lowest barrier for beginners learning JS. Please see examples in other src files to make sure it is formatted correctly. If your example creates other HTML elements apart from the canvas, they will be rendered with a width of 100 pixels.
 
 ```
 @example
@@ -193,18 +193,22 @@ arc(50, 55, 80, 80, PI+QUARTER_PI, TWO_PI);
 </div>
 ```
 
-You can have multiple examples for one function, just make sure each has it's own `<div>` wrapping. 
+You can have multiple examples for one function, just make sure you have only
+one @example followed by each example having it's own `<div>` wrapping seperated
+by a line break. 
+
 ```
 @example
 <div>
 <code>arc(50, 50, 80, 80, 0, PI+QUARTER_PI, OPEN);</code>
 </div>
+
 <div>
 <code>arc(50, 50, 80, 80, 0, PI, OPEN);</code>
 </div>
 ```
 
-If you do not want the example to render with canvas (ie you just want the code to show up), include the class "norender" in the div:
+If you do not want the example to execute your code (i.e. you just want the code to show up), include the class "norender" in the div:
 ```
 @example
 <div class="norender">
@@ -212,8 +216,8 @@ If you do not want the example to render with canvas (ie you just want the code 
 </div>
 ```
 
-
 If you do not want the example to be run as part of the build tests (for example, if the example requires user interaction, or uses functionality not supported by the headless-Chrome test framework), include the class "notest" in the div:
+
 ```
 @example
 <div class='norender notest'><code>
@@ -224,14 +228,10 @@ function setup() {
 </code></div>
 ```
 
-If you need to link to external asset files, put them in [/docs/yuidoc-p5-theme/assets](https://github.com/processing/p5.js/tree/master/docs/yuidoc-p5-theme/assets) and then link to them with "assets/filename.ext" in the code. See the [tint example](http://p5js.org/reference/#/p5/tint).
-
-On some code editors copy-pasting examples in the inline documentation may be awkward and require a lot of adjustments (tabs, asterisks, spaces). You can use this simple tool to beautify the code (and re-indent it to 2 spaces) and make it ready for a copy-paste: 
-[p5examplesFormatter](http://molleindustria.org/p5examplesFormatter/)
-| [download as zip](http://molleindustria.org/p5examplesFormatter/p5examplesFormatter.zip)
+If you need to link to external asset files, put them in [/docs/yuidoc-p5-theme/assets](https://github.com/processing/p5.js/tree/main/docs/yuidoc-p5-theme/assets) and then link to them with "assets/filename.ext" in the code. See the [tint example](http://p5js.org/reference/#/p5/tint).
 
 ### Adding alt-text
-Finally, if you add an example, please add [alt-text](https://moz.com/learn/seo/alt-text) so visually impaired users can understand what the example is showing on the screen. This can be added with the tag `@alt` at the end of all of the examples for a given function (not an individual `@alt` tag under each), add a line break to separate the descriptions for multiple examples.
+Finally, for every example you add, please add [alt-text](https://moz.com/learn/seo/alt-text) so visually impaired users can understand what the example is showing on the screen. This can be added with the tag `@alt` at the end of all of the examples for a given function (not an individual `@alt` tag under each), add a line break to separate the descriptions for multiple examples.
 ```
 @example
 <div>
@@ -245,6 +245,7 @@ function draw() {
 }
 </code>
 </div>
+
 <div>
 <code>
 let noiseScale=0.02;
@@ -264,13 +265,20 @@ vertical line moves left to right with updating noise values.
 horizontal wave pattern effected by mouse x-position & updating noise values.
 ```
 
+## Template for methods
+Here is an example for a well-documentated method. To create a new method, you can use [this template](https://github.com/processing/p5.js/tree/main/contributor_docs/method.example.js). Replace the text with your method's variables and remove the remaining ones.
+![Image showing inline documentation example for methods](https://raw.githubusercontent.com/processing/p5.js/main/contributor_docs/images/method-template-example.png)
+
 
 ## Generating documentation
 
-Run `grunt yui:build` once first to generate all local files needed, as well as a copy of the reference from the source code. Run it again anytime you make changes to the core JS files behind the yuidoc reference page. These are changes in files located in the yuidoc-p5-theme-src folder, NOT inline documentation changes to src. If you only made changes to the source code, you can just run `grunt yui`, though `grunt yui:build` will also do the trick. 
+* Run `grunt yui:build` once first to generate all local files needed, as well as a copy of the reference from the source code. Run it again anytime you make changes to the core JS files behind the yuidoc reference page. These are changes in files located in the yuidoc-p5-theme-src folder, NOT inline documentation changes to src.
+* If you only made changes to the source code, you can just run `grunt yui`, though `grunt yui:build` will also do the trick. 
+* You can run `npm run docs:dev` to launch a live preview of the site that will update each time you make changes. (You will need to refresh the page after making changes to see them appear.)
 
 The build reference can be found in docs/reference. To preview it locally, run `grunt yui:dev` and view it as http://localhost:9001/docs/reference/.
 
+
 ## Spanish language version
 
-The [Spanish version](http://p5js.org/es/reference) is created a little differently. Here are [instructions](https://github.com/processing/p5.js-website/blob/master/contributor_docs/i18n_contribution.md) to update this material.
+The [Spanish version](http://p5js.org/es/reference) is created a little differently. Here are [instructions](https://github.com/processing/p5.js-website/blob/main/contributor_docs/i18n_contribution.md) to update this material.

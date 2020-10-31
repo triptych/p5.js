@@ -57,7 +57,6 @@ p5.prototype._lcgSetSeed = function(stateProperty, val) {
  *
  * @alt
  * many vertical lines drawn in white, black or grey.
- *
  */
 p5.prototype.randomSeed = function(seed) {
   this._lcgSetSeed(randomStateProp, seed);
@@ -116,7 +115,6 @@ p5.prototype.randomSeed = function(seed) {
  * 100 horizontal lines from center canvas to right. size+fill change each time
  * 100 horizontal lines from center of canvas. height & side change each render
  * word displayed at random. Either apple, bear, cat, or dog
- *
  */
 /**
  * @method random
@@ -160,15 +158,15 @@ p5.prototype.random = function(min, max) {
  * just a very low probability that values far from the mean will be
  * returned; and a higher probability that numbers near the mean will
  * be returned.
- * <br><br>
+ *
  * Takes either 0, 1 or 2 arguments.<br>
  * If no args, returns a mean of 0 and standard deviation of 1.<br>
  * If one arg, that arg is the mean (standard deviation is 1).<br>
  * If two args, first is mean, second is standard deviation.
  *
  * @method randomGaussian
- * @param  {Number} mean  the mean
- * @param  {Number} sd    the standard deviation
+ * @param  {Number} [mean]  the mean
+ * @param  {Number} [sd]    the standard deviation
  * @return {Number} the random number
  * @example
  * <div>
@@ -208,7 +206,7 @@ p5.prototype.random = function(min, max) {
  * 100 horizontal lines from center of canvas. height & side change each render
  * black lines radiate from center of canvas. size determined each render
  */
-p5.prototype.randomGaussian = function(mean, sd) {
+p5.prototype.randomGaussian = function(mean, sd = 1) {
   let y1, x1, x2, w;
   if (this._gaussian_previous) {
     y1 = y2;
@@ -226,8 +224,7 @@ p5.prototype.randomGaussian = function(mean, sd) {
   }
 
   const m = mean || 0;
-  const s = sd || 1;
-  return y1 * s + m;
+  return y1 * sd + m;
 };
 
 export default p5;

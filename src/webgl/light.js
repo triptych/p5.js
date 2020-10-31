@@ -8,8 +8,8 @@
 import p5 from '../core/main';
 
 /**
- * Creates an ambient light with a color
- *
+ * Creates an ambient light with a color. Ambient light is light that comes from everywhere on the canvas.
+ * It has no particular source.
  * @method ambientLight
  * @param  {Number}        v1      red or hue value relative to
  *                                 the current color range
@@ -23,22 +23,28 @@ import p5 from '../core/main';
  * @example
  * <div>
  * <code>
+ * createCanvas(100, 100, WEBGL);
+ * ambientLight(0);
+ * ambientMaterial(250);
+ * sphere(40);
+ * </code>
+ * </div>
+ * <div>
+ * <code>
  * function setup() {
  *   createCanvas(100, 100, WEBGL);
  * }
  * function draw() {
- *   background(0);
- *   ambientLight(150);
- *   ambientMaterial(250);
- *   noStroke();
- *   sphere(40);
+ *   background(51);
+ *   ambientLight(100); // white light
+ *   ambientMaterial(255, 102, 94); // magenta material
+ *   box(30);
  * }
  * </code>
  * </div>
- *
  * @alt
  * evenly distributed light across a sphere
- *
+ * evenly distributed light across a rotating sphere
  */
 
 /**
@@ -169,6 +175,8 @@ p5.prototype.specularColor = function(v1, v2, v3) {
 
 /**
  * Creates a directional light with a color and a direction
+ *
+ * A maximum of 5 directionalLight can be active at one time
  * @method directionalLight
  * @param  {Number}    v1       red or hue value (depending on the current
  * color mode),
@@ -196,7 +204,6 @@ p5.prototype.specularColor = function(v1, v2, v3) {
  *
  * @alt
  * light source on canvas changeable with mouse position
- *
  */
 
 /**
@@ -271,6 +278,8 @@ p5.prototype.directionalLight = function(v1, v2, v3, x, y, z) {
 
 /**
  * Creates a point light with a color and a light position
+ *
+ * A maximum of 5 pointLight can be active at one time
  * @method pointLight
  * @param  {Number}    v1       red or hue value (depending on the current
  * color mode),
@@ -307,7 +316,6 @@ p5.prototype.directionalLight = function(v1, v2, v3, x, y, z) {
  *
  * @alt
  * spot light on canvas changes position with mouse
- *
  */
 
 /**
@@ -444,7 +452,6 @@ p5.prototype.lights = function() {
  *
  * @alt
  * Two spheres with different falloff values show different intensity of light
- *
  */
 p5.prototype.lightFalloff = function(
   constantAttenuation,
@@ -499,6 +506,7 @@ p5.prototype.lightFalloff = function(
  * light towards the center. Both angle and concentration are optional, but if
  * you want to provide concentration, you will also have to specify the angle.
  *
+ * A maximum of 5 spotLight can be active at one time
  * @method spotLight
  * @param  {Number}    v1       red or hue value (depending on the current
  * color mode),

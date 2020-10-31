@@ -10,7 +10,7 @@ import * as constants from '../core/constants';
 /**
  * Main graphics and rendering context, as well as the base API
  * implementation for p5.js "core". To be used as the superclass for
- * Renderer2D and Renderer3D classes, respecitvely.
+ * Renderer2D and Renderer3D classes, respectively.
  *
  * @class p5.Renderer
  * @constructor
@@ -219,6 +219,7 @@ p5.Renderer.prototype.text = function(str, x, y, maxWidth, maxHeight) {
   let testWidth;
   let words;
   let totalHeight;
+  let shiftedY;
   let finalMaxHeight = Number.MAX_VALUE;
 
   if (!(this._doFill || this._doStroke)) {
@@ -243,11 +244,24 @@ p5.Renderer.prototype.text = function(str, x, y, maxWidth, maxHeight) {
         testLine = `${line + words[n]} `;
         testWidth = this.textWidth(testLine);
         if (testWidth > maxWidth) {
-          line = `${words[n]} `;
-          totalHeight += p.textLeading();
+          let currentWord = words[n];
+          for (let index = 0; index < currentWord.length; index++) {
+            testLine = `${line + currentWord[index]}`;
+            testWidth = this.textWidth(testLine);
+            if (testWidth > maxWidth && line.length > 0) {
+              line = `${currentWord[index]}`;
+              totalHeight += p.textLeading();
+            } else {
+              line = testLine;
+            }
+          }
+          line = `${line} `;
         } else {
           line = testLine;
         }
+      }
+      if (ii < cars.length - 1) {
+        totalHeight += p.textLeading();
       }
     }
 
@@ -269,10 +283,12 @@ p5.Renderer.prototype.text = function(str, x, y, maxWidth, maxHeight) {
     if (typeof maxHeight !== 'undefined') {
       switch (this._textBaseline) {
         case constants.BOTTOM:
-          y += maxHeight - totalHeight;
+          shiftedY = y + (maxHeight - totalHeight);
+          y = Math.max(shiftedY, y);
           break;
         case constants.CENTER:
-          y += (maxHeight - totalHeight) / 2;
+          shiftedY = y + (maxHeight - totalHeight) / 2;
+          y = Math.max(shiftedY, y);
           break;
         case constants.BASELINE:
           baselineHacked = true;
@@ -290,10 +306,25 @@ p5.Renderer.prototype.text = function(str, x, y, maxWidth, maxHeight) {
       for (n = 0; n < words.length; n++) {
         testLine = `${line + words[n]} `;
         testWidth = this.textWidth(testLine);
-        if (testWidth > maxWidth && line.length > 0) {
-          this._renderText(p, line, x, y, finalMaxHeight);
-          line = `${words[n]} `;
-          y += p.textLeading();
+        if (testWidth > maxWidth) {
+          let currentWord = words[n];
+          for (let index = 0; index < currentWord.length; index++) {
+            testLine = `${line + currentWord[index]}`;
+            testWidth = this.textWidth(testLine);
+            if (testWidth > maxWidth && line.length > 0) {
+              const lastChar = line.slice(-1);
+              const shouldAddHyphen = lastChar !== '\n' && lastChar !== ' ';
+              line = `${line}${shouldAddHyphen ? '-' : ''}`;
+
+              this._renderText(p, line, x, y, finalMaxHeight);
+              y += p.textLeading();
+
+              line = `${currentWord[index]}`;
+            } else {
+              line = testLine;
+            }
+          }
+          line = `${line} `;
         } else {
           line = testLine;
         }
